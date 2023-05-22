@@ -227,9 +227,11 @@ public class SavePDF {
             if (file.exists()) {
                 // Append 1 to the new file name and store it.
                 String newName = "reciept(" + mobileNoText + ")" + count + ".pdf";
+                System.out.println("COUNT : " + count);
+                System.out.println("FILENAME : " + newName);
                 count = count + 1;
                 File file1 = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), newName);
-                myPdfDocument.writeTo(new FileOutputStream(file));
+                myPdfDocument.writeTo(new FileOutputStream(file1));
                 String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString();
 
                 Toast.makeText(context, "File Saved:)", Toast.LENGTH_SHORT).show();

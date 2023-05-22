@@ -124,7 +124,8 @@ public class AddUserActivity extends AppCompatActivity {
                 DatePickerDialog datePickerDialog = new DatePickerDialog(AddUserActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        tithiTarikh.setText(SimpleDateFormat.getInstance().format(calendar.getTime()));
+                        String selectedDate = dayOfMonth + "/" + (month + 1) + "/" + year;
+                        tithiTarikh.setText(selectedDate);
                     }
                 }, year, month, day);
                 datePickerDialog.show();
