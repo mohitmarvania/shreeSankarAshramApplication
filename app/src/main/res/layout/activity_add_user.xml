@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".AddUserActivity">
+
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:layout_gravity="center"
+        android:textAlignment="center"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:hint="Fill the form"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/rounded_corner">
+
+        <EditText
+            android:id="@+id/editName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/bhavdiya"
+            android:background="@color/white"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:inputType="text"
+            android:maxLength="30"
+            android:padding="10dp"
+            android:layout_margin="10dp" />
+
+        <EditText
+            android:id="@+id/editSmarnarthe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/smarnanthe"
+            android:background="@color/white"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:inputType="text"
+            android:maxLength="30"
+            android:padding="10dp"
+            android:layout_margin="10dp" />
+
+        <EditText
+            android:id="@+id/editAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/sarnamu"
+            android:background="@color/white"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:maxLength="40"
+            android:padding="10dp"
+            android:layout_margin="10dp"
+            android:imeOptions="actionNext"
+            android:lines="3"
+            android:gravity="top"/>
+
+        <EditText
+            android:id="@+id/editMobileNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/mobilenumber"
+            android:background="@color/white"
+            android:textColor="@color/black"
+            android:inputType="number"
+            android:textSize="18sp"
+            android:padding="10dp"
+            android:layout_margin="10dp" />
+
+        <EditText
+            android:id="@+id/editBhet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/bhet"
+            android:background="@color/white"
+            android:textColor="@color/black"
+            android:inputType="number"
+            android:textSize="18sp"
+            android:padding="10dp"
+            android:layout_margin="10dp" />
+
+    </LinearLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/generateRecieptBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Generate Invoice"
+        android:layout_marginTop="10dp"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/selectImageBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Select Image For Pdf"
+        android:layout_marginTop="10dp"
+        android:onClick="openImagePicker"/>
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_below="@id/selectImageBtn"
+        android:layout_gravity="center"
+        android:scaleType="centerInside" />
+
+
+</LinearLayout>

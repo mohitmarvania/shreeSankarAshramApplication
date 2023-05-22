@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "609651879991",
+    "firebase_url": "https://invoicemaker-863de-default-rtdb.firebaseio.com",
+    "project_id": "invoicemaker-863de",
+    "storage_bucket": "invoicemaker-863de.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:609651879991:android:2084ba13fc33452bde0fb2",
+        "android_client_info": {
+          "package_name": "com.example.invoicemaker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "609651879991-46sinijm00koun3akb3h5jmtihc6m7mq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyClq1QD7xCwMEEHPpK0amHGMtNco8kVqAc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "609651879991-46sinijm00koun3akb3h5jmtihc6m7mq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

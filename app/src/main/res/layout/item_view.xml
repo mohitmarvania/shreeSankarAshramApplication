@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:layout_marginBottom="10dp"
+    android:background="@drawable/corner_list_view"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <TextView
+        android:id="@+id/nameOutput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        tools:text="Name here" />
+
+    <TextView
+        android:id="@+id/bhetOutput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/nameOutput"
+        android:textColor="@color/black"
+        tools:text="Rs. Donation here" />
+
+    <TextView
+        android:id="@+id/creationOutput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/bhetOutput"
+        android:gravity="end"
+        android:textSize="12sp"
+        tools:text="Jan 1, 2023"
+        android:textColor="@color/black" />
+
+
+</RelativeLayout>
