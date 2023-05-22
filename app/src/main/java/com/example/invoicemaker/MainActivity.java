@@ -209,7 +209,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void setImagePathToSavePdf() {
 
-        System.out.println("HEREEEE !!!");
         System.out.println(imagePathGlobal);
         SavePDF savePDF = new SavePDF();
         savePDF.setImagePathOfImage(imagePathGlobal);
