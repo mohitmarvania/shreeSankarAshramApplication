@@ -5,6 +5,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -13,6 +14,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -35,6 +37,7 @@ import com.google.firebase.storage.UploadTask;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
@@ -46,7 +49,7 @@ import io.realm.Realm;
 public class AddUserActivity extends AppCompatActivity {
 
     TextView recieptNumber;
-    EditText name, smarnarthe, address, mobileNo, bhet;
+    EditText name, smarnarthe, address, mobileNo, bhet, tithiTarikh;
     MaterialButton invoiceBtn;
     MaterialButton selectImgBtn;
 
@@ -86,9 +89,12 @@ public class AddUserActivity extends AppCompatActivity {
         bhet = findViewById(R.id.editBhet);
         invoiceBtn = findViewById(R.id.generateRecieptBtn);
         imageView = findViewById(R.id.imageView);
+        tithiTarikh = findViewById(R.id.editTithiTarikh);
         uniqueID = UUID.randomUUID().toString();
 
         retriveData();
+
+        tithiTarikhBtn();
 
         generateRecieptFunction();
 
@@ -101,6 +107,27 @@ public class AddUserActivity extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError error) {
 
+            }
+        });
+
+    }
+
+    public void tithiTarikhBtn() {
+
+        Calendar calendar = Calendar.getInstance();
+        tithiTarikh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int year = calendar.get(calendar.YEAR);
+                int month = calendar.get(calendar.MONTH);
+                int day = calendar.get(calendar.DAY_OF_MONTH);
+                DatePickerDialog datePickerDialog = new DatePickerDialog(AddUserActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        tithiTarikh.setText(SimpleDateFormat.getInstance().format(calendar.getTime()));
+                    }
+                }, year, month, day);
+                datePickerDialog.show();
             }
         });
 
@@ -304,7 +331,7 @@ public class AddUserActivity extends AppCompatActivity {
 
                         Toast.makeText(AddUserActivity.this, "DATA SAVED :)", Toast.LENGTH_SHORT).show();
 
-                        createPDF(selectedImage, dataName, dataSmarnarthe, dataAddress, dataMobileNo, dataBhet, currentDate);
+                        createPDF(selectedImage, dataName, dataSmarnarthe, dataAddress, dataMobileNo, dataBhet, currentDate, tithiTarikh.getText().toString());
 
                         Intent intent = new Intent(AddUserActivity.this, viewPdf.class);
                         intent.putExtra("mobilePath", dataMobileNo);
@@ -352,7 +379,7 @@ public class AddUserActivity extends AppCompatActivity {
                     String dataMobileNo = mobileNo.getText().toString();
                     String dataBhet = bhet.getText().toString();
                     Bitmap selectedImage = bmp;
-                    createPDF(selectedImage, dataName, dataSmarnarthe, dataAddress, dataMobileNo, dataBhet, currentDate);
+                    createPDF(selectedImage, dataName, dataSmarnarthe, dataAddress, dataMobileNo, dataBhet, currentDate, tithiTarikh.getText().toString());
 
                     Intent intent = new Intent(AddUserActivity.this, viewPdf.class);
                     intent.putExtra("mobilePath", dataMobileNo);
@@ -365,10 +392,11 @@ public class AddUserActivity extends AppCompatActivity {
 
     }
 
-    public void createPDF(Bitmap selectedImage, String name, String smarnarthe, String address, String mobileNo, String bhet, String dateCreated) {
+    public void createPDF(Bitmap selectedImage, String name, String smarnarthe, String address, String mobileNo, String bhet, String dateCreated,
+                          String tithiDate) {
 
         SavePDF saveClass = new SavePDF();
-        saveClass.savePdfToStorage(selectedImage, name, smarnarthe, address, mobileNo, bhet, dateCreated);
+        saveClass.savePdfToStorage(selectedImage, name, smarnarthe, address, mobileNo, bhet, dateCreated, tithiDate);
     }
 
 

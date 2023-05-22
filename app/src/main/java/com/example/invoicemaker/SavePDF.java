@@ -30,6 +30,7 @@ public class SavePDF {
 
     String nameText, smarnartheText, addressText, mobileNoText, bhetText, dateText;
     String inWords;
+    String tithiDateSelected;
     Bitmap bmp, scaledbmp, bmp1, scaledbmp1;
     int currentRecieptNo;
     int count = 1;
@@ -50,7 +51,7 @@ public class SavePDF {
     Context context=getApplicationContext();
 
     public void savePdfToStorage(Bitmap userImage, String name, String smarnarthe, String address, String mobileNo, String bhet,
-                                 String createdDate) {
+                                 String createdDate, String tithiDate) {
 
         nameText = name;
         smarnartheText = smarnarthe;
@@ -58,6 +59,7 @@ public class SavePDF {
         mobileNoText = mobileNo;
         bhetText = bhet;
         dateText = createdDate;
+        tithiDateSelected = tithiDate;
 
         System.out.println("Heyyyyyyy : " + imagePathOfImage);
 
@@ -106,6 +108,7 @@ public class SavePDF {
         Paint bhetDonatedPaint = new Paint();
         Paint svikarnarPaint = new Paint();
         Paint abharPaint = new Paint();
+        Paint tithiTarikhPaint = new Paint();
 
 
 
@@ -168,38 +171,46 @@ public class SavePDF {
         smarnanthePaint.setTextAlign(Paint.Align.LEFT);
         canvas.drawText("સ્મરણાર્થે : " + smarnathe_name.toUpperCase(Locale.ROOT), 560, 290, smarnanthePaint);
 
+        // Tithi Tarikh
+        String tempTithiTarikh = tithiDateSelected;
+        tithiTarikhPaint.setColor(Color.rgb(255, 0, 255));
+        tithiTarikhPaint.setTextSize(32);
+        tithiTarikhPaint.setTextAlign(Paint.Align.LEFT);
+        canvas.drawText("તિથી / તારીખ : " + tempTithiTarikh, 560, 350, tithiTarikhPaint);
+
+
         // SARNAMU
         String tempAddress = addressText;
         sarnamuPaint.setColor(Color.rgb(255, 0, 255));
         sarnamuPaint.setTextSize(32);
         sarnamuPaint.setTextAlign(Paint.Align.LEFT);
-        canvas.drawText("સરનામું : " + tempAddress, 560, 350, sarnamuPaint);
+        canvas.drawText("સરનામું : " + tempAddress, 560, 410, sarnamuPaint);
 
         // MOBILE NUMBER
         String contactNo = mobileNoText;
         mobileNoPaint.setColor(Color.rgb(255, 0, 255));
         mobileNoPaint.setTextSize(32f);
         mobileNoPaint.setTextAlign(Paint.Align.LEFT);
-        canvas.drawText("મોબાઈલ નંબર : " + contactNo, 560, 410, mobileNoPaint);
+        canvas.drawText("મોબાઈલ નંબર : " + contactNo, 560, 470, mobileNoPaint);
 
         // BHET
         String amount_donated = bhetText;
         bhetDonatedPaint.setColor(Color.rgb(255, 0, 255));
         bhetDonatedPaint.setTextSize(32f);
         bhetDonatedPaint.setTextAlign(Paint.Align.LEFT);
-        canvas.drawText("ભેટ : Rs. " + amount_donated, 560, 470, bhetDonatedPaint);
+        canvas.drawText("ભેટ : Rs. " + amount_donated, 560, 525, bhetDonatedPaint);
 
         // BHET IN WORDS
         rsWordsPaint.setColor(Color.BLACK);
         rsWordsPaint.setTextSize(32f);
         rsWordsPaint.setTextAlign(Paint.Align.LEFT);
-        canvas.drawText(inWords, 560, 525, rsWordsPaint);
+        canvas.drawText(inWords, 560, 580, rsWordsPaint);
 
         // ABHAR TEXT
         abharPaint.setColor(Color.rgb(0, 71, 171));
         abharPaint.setTextSize(28f);
         abharPaint.setTextAlign(Paint.Align.LEFT);
-        canvas.drawText("સપ્રેમ ભેટ મળ્યા છે . આપનો હૃદયપૂર્વક આભાર ", 560, 580, abharPaint);
+        canvas.drawText("સપ્રેમ ભેટ મળ્યા છે . આપનો હૃદયપૂર્વક આભાર ", 560, 640, abharPaint);
 
         // SVIKARNAR
         svikarnarPaint.setColor(Color.rgb(255, 0, 255));
