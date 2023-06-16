@@ -42,6 +42,7 @@ public class SavePDF {
     int currentRecieptNo;
     int count = 1;
     public int receiptCount;
+    int number;
 
     String imagePathOfImage;
 
@@ -66,7 +67,7 @@ public class SavePDF {
             public void onDataChange(DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     receiptCount = snapshot.getValue(Integer.class);
-                    System.out.println("count : " + receiptCount);
+                    System.out.println("countttt : " + receiptCount);
                 }
                 else {
                     System.out.println("NO SNAPSHOT HERE!!!!!!!!");
@@ -78,7 +79,6 @@ public class SavePDF {
                 Log.e("Firebase", "Error fetching receipt count", error.toException());
             }
         });
-
 
     }
 
@@ -94,10 +94,6 @@ public class SavePDF {
         bhetText = bhet;
         dateText = createdDate;
         tithiDateSelected = tithiDate;
-
-        fetchReceiptCount();
-
-        System.out.println("COUNT here : " + receiptCount);
 
 
         Realm realm = Realm.getDefaultInstance();
@@ -146,6 +142,7 @@ public class SavePDF {
         Paint svikarnarPaint = new Paint();
         Paint abharPaint = new Paint();
         Paint tithiTarikhPaint = new Paint();
+        Paint receiptNumberPaint = new Paint();
 
         // Blue paint texts.
         Paint namePaint = new Paint();
@@ -154,6 +151,7 @@ public class SavePDF {
         Paint addressPaint = new Paint();
         Paint numberPaint = new Paint();
         Paint bhetPaint = new Paint();
+        Paint numberText = new Paint();
 
 
 
@@ -164,6 +162,8 @@ public class SavePDF {
 
         canvas.drawBitmap(scaledbmp, 0,0,myPaint);
         canvas.drawBitmap(scaledbmp1, 530, 0, myPaint1);
+
+        fetchReceiptCount();
 
         // SHRI SANKAR MAHARAJ
         shriSankarPaint.setTextAlign(Paint.Align.LEFT);
@@ -201,6 +201,47 @@ public class SavePDF {
         datePaint.setTextSize(25);
         datePaint.setTextAlign(Paint.Align.LEFT);
         canvas.drawText("Dt. " + createdDate, 540, 170, datePaint);
+
+
+        // RECEIPT NUMBER (1501)
+        receiptNumberPaint.setColor(Color.BLACK);
+        receiptNumberPaint.setTextSize(25);
+        receiptNumberPaint.setTextAlign(Paint.Align.RIGHT);
+        canvas.drawText("Receipt No. : ", 1320 - 70, 170, receiptNumberPaint);
+
+        // RECEIPT TEXT
+        ////////////////////////////
+        // CODE TO FETCH THE CURRENT VALUE OF RECEIPT COUNTER FROM DATABASE.
+//        FirebaseDatabase database = FirebaseDatabase.getInstance();
+//        DatabaseReference receiptCountRef = database.getReference("Receipt Count");
+//        receiptCountRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot snapshot) {
+//                if (snapshot.exists()) {
+//                    receiptCount = snapshot.getValue(Integer.class);
+//                    System.out.println("countttt : " + receiptCount);
+//                    numberText.setColor(Color.rgb(0, 0, 139));
+//                    numberText.setTextSize(25);
+//                    numberText.setTextAlign(Paint.Align.RIGHT);
+//                    canvas.drawText(String.valueOf(receiptCount), 1320 - 40, 170, numberText);
+//                }
+//                else {
+//                    System.out.println("NO SNAPSHOT HERE!!!!!!!!");
+//                }
+//
+//            }
+//            @Override
+//            public void onCancelled(DatabaseError error) {
+//                Log.e("Firebase", "Error fetching receipt count", error.toException());
+//            }
+//        });
+
+        // RECEIPT TEXT
+        numberText.setColor(Color.rgb(0, 0, 139));
+        numberText.setTextSize(25);
+        numberText.setTextAlign(Paint.Align.RIGHT);
+        canvas.drawText(String.valueOf(receiptCount), 1320 - 40, 170, numberText);
+
 
         // BHAVDIYA
         String tempName = nameText;

@@ -107,6 +107,11 @@ public class AddUserActivity extends AppCompatActivity {
 
         generateRecieptFunction();
 
+        if (invoiceBtn.getText().toString().equals("Generate Invoice")) {
+
+            setReceiptCount();
+        }
+
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
@@ -334,7 +339,7 @@ public class AddUserActivity extends AppCompatActivity {
                         long createdTime = System.currentTimeMillis();
 
                         // Increment or set the receipt counter.
-                        setReceiptCount();
+//                        setReceiptCount();
 
                         receiptCountInFireStore();
 
