@@ -24,6 +24,7 @@ public class viewPdf extends AppCompatActivity {
     TextView pdfName;
     MaterialButton shareBtn;
     String mobileNoPath;
+    String name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +35,7 @@ public class viewPdf extends AppCompatActivity {
         pdfName = findViewById(R.id.pdfName);
         shareBtn = findViewById(R.id.sharePdfBtn);
         mobileNoPath = getIntent().getStringExtra("mobilePath");
+        name = getIntent().getStringExtra("name");
 
         // POLICY
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
@@ -42,7 +44,8 @@ public class viewPdf extends AppCompatActivity {
 
         // VIEW PDF
         String recieptName = "reciept(" + mobileNoPath + ").pdf";
-        pdfName.setText(recieptName);
+        String receiptDisplayName = "receipt(" + name + ").pdf";
+        pdfName.setText(receiptDisplayName);
         String path = getDownloadsFilePath(recieptName);
 
         Context context = getApplicationContext();

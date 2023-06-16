@@ -6,11 +6,19 @@ import io.realm.RealmObject;
 
 public class Data extends RealmObject {
     long recieptNo;
+    int receiptCounter;
     String name, smartheName, address, donation;
     String mobileNo;
     String currentDate;
     long createdTime;
 
+    public int getReceiptCounter() {
+        return receiptCounter;
+    }
+
+    public void setReceiptCounter(int receiptCounter) {
+        this.receiptCounter = receiptCounter;
+    }
 
     public long getRecieptNo() {
         return recieptNo;

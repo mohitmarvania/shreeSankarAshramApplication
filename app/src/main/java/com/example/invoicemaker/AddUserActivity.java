@@ -13,6 +13,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -28,8 +29,12 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -39,7 +44,9 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.UUID;
 
 import io.reactivex.annotations.NonNull;
@@ -57,6 +64,7 @@ public class AddUserActivity extends AppCompatActivity {
     String uniqueID = "123";
     long recieptNo = 0;
     boolean isEdited = false;
+    public int receiptCounter;
 
     //Image variable
     private final int GALLERY_REQUEST_CODE = 1;
@@ -71,8 +79,9 @@ public class AddUserActivity extends AppCompatActivity {
     Data data = new Data();
     Data dataF = new Data();
 
-    FirebaseDatabase database = FirebaseDatabase.getInstance();;
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference("data");
+    DatabaseReference receiptCountRef = database.getReference("Receipt Count");
     DatabaseReference databaseReference;
     StorageReference storageReference;
 
@@ -270,6 +279,27 @@ public class AddUserActivity extends AppCompatActivity {
 
     }
 
+    public void receiptCountInFireStore() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference receiptCountCollection = db.collection("receipt_count");
+
+        Map<String, Object> receiptData = new HashMap<>();
+        receiptData.put("receiptNumber", 1501);
+        receiptCountCollection.document("receipt_document").set(receiptData)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(Exception e) {
+                        Log.e("Firestore", "Error creating receipt document", e);
+                    }
+                });
+    }
+
     public void generateRecieptFunction() {
 
         invoiceBtn.setOnClickListener(new View.OnClickListener() {
@@ -303,6 +333,11 @@ public class AddUserActivity extends AppCompatActivity {
                         String currentDate = sdf.format(new Date());
                         long createdTime = System.currentTimeMillis();
 
+                        // Increment or set the receipt counter.
+                        setReceiptCount();
+
+                        receiptCountInFireStore();
+
                         dataF.recieptNo = recieptNo + 1;
                         dataF.name = dataName;
                         dataF.smartheName = dataSmarnarthe;
@@ -316,7 +351,6 @@ public class AddUserActivity extends AppCompatActivity {
 
                         realm.beginTransaction();
                         data = realm.createObject(Data.class);
-
 
                         data.setName(dataName);
                         data.setSmartheName(dataSmarnarthe);
@@ -336,6 +370,7 @@ public class AddUserActivity extends AppCompatActivity {
 
                         Intent intent = new Intent(AddUserActivity.this, viewPdf.class);
                         intent.putExtra("mobilePath", dataMobileNo);
+                        intent.putExtra("name", dataName);
                         startActivity(intent);
 
 //                        finish();
@@ -384,10 +419,42 @@ public class AddUserActivity extends AppCompatActivity {
 
                     Intent intent = new Intent(AddUserActivity.this, viewPdf.class);
                     intent.putExtra("mobilePath", dataMobileNo);
+                    intent.putExtra("name", dataName);
                     startActivity(intent);
 
                 }
 
+            }
+        });
+
+    }
+
+
+    public void setReceiptCount() {
+
+        // CODE TO UPDATE THE VALUE OF COUNTER BY 1 IN THE DATABASE.
+        receiptCountRef.runTransaction(new Transaction.Handler() {
+            @Override
+            public Transaction.Result doTransaction(MutableData currentData) {
+                Integer currentValue = currentData.getValue(Integer.class);
+                System.out.println("Current value : " + currentValue);
+                if (currentValue == null) {
+                    currentData.setValue(1501);
+                } else {
+                    currentData.setValue(currentValue + 1);
+
+                }
+
+                return Transaction.success(currentData);
+            }
+
+            @Override
+            public void onComplete(DatabaseError error, boolean committed, DataSnapshot currentData) {
+                if (error != null) {
+                    Log.e("Firebase", "Transaction failed.", error.toException());
+                } else {
+                    Log.d("Firebase", "Transaction completed.");
+                }
             }
         });
 

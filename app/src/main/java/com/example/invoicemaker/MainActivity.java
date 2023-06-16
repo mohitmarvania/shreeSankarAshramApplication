@@ -51,6 +51,7 @@ import javax.annotation.Nullable;
 import io.reactivex.annotations.NonNull;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
+import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
@@ -88,6 +89,11 @@ public class MainActivity extends AppCompatActivity {
         });
 
         Realm.init(getApplicationContext());
+        RealmConfiguration config = new RealmConfiguration.Builder()
+                .schemaVersion(1)
+                .migration(new RealmMigration())
+                .build();
+        Realm.setDefaultConfiguration(config);
         Realm realm = Realm.getDefaultInstance();
 
         // Fetch data from data class of all the user
@@ -166,54 +172,54 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-    private void saveImageToFirebase() {
-
-        ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setTitle("Uploading Image");
-        progressDialog.show();
-
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", Locale.CANADA);
-        Date now = new Date();
-        String fileName = formatter.format(now);
-        imageNameInFirebase = fileName;
-        storageReference = FirebaseStorage.getInstance().getReference("images/" + fileName);
-        databaseReference = FirebaseDatabase.getInstance().getReference("Images");
-        storageReference.putFile(imageUri)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                        Toast.makeText(MainActivity.this, "Image Uploaded :)", Toast.LENGTH_SHORT).show();
-                        if (progressDialog.isShowing()) {
-                            progressDialog.dismiss();
-                        }
-                        Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
-                        while (!uriTask.isComplete());
-                        Uri uri = uriTask.getResult();
-                        imageClass imageClassObj = new imageClass(fileName, uri.toString(), fileName);
-                        databaseReference.setValue(imageClassObj);
-
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(Exception e) {
-                if (progressDialog.isShowing()) {
-                    progressDialog.dismiss();
-                }
-                Toast.makeText(MainActivity.this, "Uploading Failed !!", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-    }
-
-    private void setImagePathToSavePdf() {
-
-        System.out.println(imagePathGlobal);
-        SavePDF savePDF = new SavePDF();
-        savePDF.setImagePathOfImage(imagePathGlobal);
-
-    }
+    // USED TO SAVE THE IMAGE TO FIREBASE WHICH IS ALREADY CREATED IN ADDUSERACTIVITY CLASS SO COMMENT HERE.
+//    private void saveImageToFirebase() {
+//
+//        ProgressDialog progressDialog = new ProgressDialog(this);
+//        progressDialog.setTitle("Uploading Image");
+//        progressDialog.show();
+//
+//        SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", Locale.CANADA);
+//        Date now = new Date();
+//        String fileName = formatter.format(now);
+//        imageNameInFirebase = fileName;
+//        storageReference = FirebaseStorage.getInstance().getReference("images/" + fileName);
+//        databaseReference = FirebaseDatabase.getInstance().getReference("Images");
+//        storageReference.putFile(imageUri)
+//                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                    @Override
+//                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//
+//                        Toast.makeText(MainActivity.this, "Image Uploaded :)", Toast.LENGTH_SHORT).show();
+//                        if (progressDialog.isShowing()) {
+//                            progressDialog.dismiss();
+//                        }
+//                        Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
+//                        while (!uriTask.isComplete());
+//                        Uri uri = uriTask.getResult();
+//                        imageClass imageClassObj = new imageClass(fileName, uri.toString(), fileName);
+//                        databaseReference.setValue(imageClassObj);
+//
+//                    }
+//                }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(Exception e) {
+//                if (progressDialog.isShowing()) {
+//                    progressDialog.dismiss();
+//                }
+//                Toast.makeText(MainActivity.this, "Uploading Failed !!", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//
+//    }
+//
+//    private void setImagePathToSavePdf() {
+//
+//        System.out.println(imagePathGlobal);
+//        SavePDF savePDF = new SavePDF();
+//        savePDF.setImagePathOfImage(imagePathGlobal);
+//
+//    }
 
     @Override
     public void onBackPressed() {

@@ -13,7 +13,14 @@ import android.graphics.Typeface;
 import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
 import android.os.Environment;
+import android.util.Log;
 import android.widget.Toast;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -34,6 +41,7 @@ public class SavePDF {
     Bitmap bmp, scaledbmp, bmp1, scaledbmp1;
     int currentRecieptNo;
     int count = 1;
+    public int receiptCount;
 
     String imagePathOfImage;
 
@@ -46,6 +54,32 @@ public class SavePDF {
 
     public void setImagePathOfImage(String imagePathOfImage) {
         this.imagePathOfImage = imagePathOfImage;
+    }
+
+    public void fetchReceiptCount() {
+
+        // CODE TO FETCH THE CURRENT VALUE OF RECEIPT COUNTER FROM DATABASE.
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference receiptCountRef = database.getReference("Receipt Count");
+        receiptCountRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    receiptCount = snapshot.getValue(Integer.class);
+                    System.out.println("count : " + receiptCount);
+                }
+                else {
+                    System.out.println("NO SNAPSHOT HERE!!!!!!!!");
+                }
+
+            }
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Log.e("Firebase", "Error fetching receipt count", error.toException());
+            }
+        });
+
+
     }
 
     Context context=getApplicationContext();
@@ -61,7 +95,10 @@ public class SavePDF {
         dateText = createdDate;
         tithiDateSelected = tithiDate;
 
-        System.out.println("Heyyyyyyy : " + imagePathOfImage);
+        fetchReceiptCount();
+
+        System.out.println("COUNT here : " + receiptCount);
+
 
         Realm realm = Realm.getDefaultInstance();
         RealmResults<Data> dataList = realm.where(Data.class).findAll().sort("createdTime", Sort.DESCENDING);
@@ -109,6 +146,14 @@ public class SavePDF {
         Paint svikarnarPaint = new Paint();
         Paint abharPaint = new Paint();
         Paint tithiTarikhPaint = new Paint();
+
+        // Blue paint texts.
+        Paint namePaint = new Paint();
+        Paint snamePaint = new Paint();
+        Paint tarikhPaint = new Paint();
+        Paint addressPaint = new Paint();
+        Paint numberPaint = new Paint();
+        Paint bhetPaint = new Paint();
 
 
 
@@ -162,43 +207,79 @@ public class SavePDF {
         bhavdiyaPaint.setColor(Color.rgb(255, 0, 255));
         bhavdiyaPaint.setTextSize(32);
         bhavdiyaPaint.setTextAlign(Paint.Align.LEFT);
-        canvas.drawText("ભવદિય શ્રી : " + tempName.toUpperCase(Locale.ROOT), 560, 230, bhavdiyaPaint);
+        canvas.drawText("ભવદિય શ્રી : ", 560, 230, bhavdiyaPaint);
+
+        // BHAVDIYA TEXT
+        namePaint.setColor(Color.rgb(0, 0, 139));
+        namePaint.setTextSize(32);
+        namePaint.setTextAlign(Paint.Align.LEFT);
+        canvas.drawText(tempName.toUpperCase(Locale.ROOT), 705, 230, namePaint);
 
         // SMARNATHE
         String smarnathe_name = smarnartheText;
         smarnanthePaint.setColor(Color.rgb(255, 0, 255));
         smarnanthePaint.setTextSize(32);
         smarnanthePaint.setTextAlign(Paint.Align.LEFT);
-        canvas.drawText("સ્મરણાર્થે : " + smarnathe_name.toUpperCase(Locale.ROOT), 560, 290, smarnanthePaint);
+        canvas.drawText("સ્મરણાર્થે : ", 560, 290, smarnanthePaint);
+
+        // SMARNATHE TEXT
+        snamePaint.setColor(Color.rgb(0, 0, 139));
+        snamePaint.setTextSize(32);
+        snamePaint.setTextAlign(Paint.Align.LEFT);
+        canvas.drawText(smarnathe_name.toUpperCase(Locale.ROOT), 700, 290, snamePaint);
 
         // Tithi Tarikh
         String tempTithiTarikh = tithiDateSelected;
         tithiTarikhPaint.setColor(Color.rgb(255, 0, 255));
         tithiTarikhPaint.setTextSize(32);
         tithiTarikhPaint.setTextAlign(Paint.Align.LEFT);
-        canvas.drawText("તિથી / તારીખ : " + tempTithiTarikh, 560, 350, tithiTarikhPaint);
+        canvas.drawText("તિથી / તારીખ : " , 560, 350, tithiTarikhPaint);
 
+        // Tithi Tarikh Text
+        tarikhPaint.setColor(Color.rgb(0, 0, 139));
+        tarikhPaint.setTextSize(32);
+        tarikhPaint.setTextAlign(Paint.Align.LEFT);
+        canvas.drawText(tempTithiTarikh, 760, 350, tarikhPaint);
 
         // SARNAMU
         String tempAddress = addressText;
         sarnamuPaint.setColor(Color.rgb(255, 0, 255));
         sarnamuPaint.setTextSize(32);
         sarnamuPaint.setTextAlign(Paint.Align.LEFT);
-        canvas.drawText("સરનામું : " + tempAddress, 560, 410, sarnamuPaint);
+        canvas.drawText("સરનામું : ", 560, 410, sarnamuPaint);
+
+        // SARNAMU TEXT
+        addressPaint.setColor(Color.rgb(0, 0, 139));
+        addressPaint.setTextSize(32);
+        addressPaint.setTextAlign(Paint.Align.LEFT);
+        canvas.drawText(tempAddress, 690, 410, addressPaint);
 
         // MOBILE NUMBER
         String contactNo = mobileNoText;
         mobileNoPaint.setColor(Color.rgb(255, 0, 255));
         mobileNoPaint.setTextSize(32f);
         mobileNoPaint.setTextAlign(Paint.Align.LEFT);
-        canvas.drawText("મોબાઈલ નંબર : " + contactNo, 560, 470, mobileNoPaint);
+        canvas.drawText("મોબાઈલ નંબર : ", 560, 470, mobileNoPaint);
+
+        // MOBILE NUMBER TEXT
+        numberPaint.setColor(Color.rgb(0, 0, 139));
+        numberPaint.setTextSize(32);
+        numberPaint.setTextAlign(Paint.Align.LEFT);
+        canvas.drawText(contactNo, 760, 470, numberPaint);
+
 
         // BHET
         String amount_donated = bhetText;
         bhetDonatedPaint.setColor(Color.rgb(255, 0, 255));
         bhetDonatedPaint.setTextSize(32f);
         bhetDonatedPaint.setTextAlign(Paint.Align.LEFT);
-        canvas.drawText("ભેટ : Rs. " + amount_donated, 560, 525, bhetDonatedPaint);
+        canvas.drawText("ભેટ : Rs. ", 560, 525, bhetDonatedPaint);
+
+        // BHET TEXT
+        bhetPaint.setColor(Color.rgb(0, 0, 139));
+        bhetPaint.setTextSize(32);
+        bhetPaint.setTextAlign(Paint.Align.LEFT);
+        canvas.drawText(amount_donated, 700, 525, bhetPaint);
 
         // BHET IN WORDS
         rsWordsPaint.setColor(Color.BLACK);
